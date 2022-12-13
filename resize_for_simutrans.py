@@ -31,8 +31,9 @@ class resize_for_simutrans():
                 #        f.write(str(im[i,j])+",")
                 #    f.write("]\n")
                 #f.close()
-                return 2
-            if imge.mode=="RGB":
+                #return 2
+                modemode=2
+            elif imge.mode=="RGB":
                 modemode=0
             if imge.mode=="P":
                 modemode=1
@@ -53,6 +54,23 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
                 #print(inimg[k,l])
                 if 0<= k< inimg.shape[0] and 0<= l< inimg.shape[1]:
                     if reduce_color(inimg[k,l])!="False":
+                        thiscount=np.abs((-max(k,inX-inrangeX/2.0)+min(k+1,inX+inrangeX/2.0))*(-max(l,inY-inrangeY/2.0)+min(l+1,inY+inrangeY/2.0)))
+                        color=color+inimg[k,l]*thiscount
+                        #print(inimg[k,l],color,k,l)
+                        count = count+thiscount
+        if count==0.0:
+            return inimg[int(inX),int(inY)]
+        else:
+            result = color/count
+            return result
+    def merge_mode2(inimg,inX,inY,inrangeX,inrangeY):
+        color = np.array([0.0,0.0,0.0,0.0])
+        count = 0.0
+        for k in range(int(-inrangeX/2.0+inX),int(inrangeX/2.0+inX+0.99)):
+            for l in range(int(-inrangeY/2.0+inY-0.99),int(inrangeY/2.0+inY+0.99)):
+                #print(inimg[k,l])
+                if 0<= k< inimg.shape[0] and 0<= l< inimg.shape[1]:
+                    if reduce_color_2(inimg[k,l])!="False":
                         thiscount=np.abs((-max(k,inX-inrangeX/2.0)+min(k+1,inX+inrangeX/2.0))*(-max(l,inY-inrangeY/2.0)+min(l+1,inY+inrangeY/2.0)))
                         color=color+inimg[k,l]*thiscount
                         #print(inimg[k,l],color,k,l)
@@ -84,6 +102,11 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
             return "False"
         else:
             return "True"
+    def reduce_color_2(input):
+        if (input==np.array([231,255,255,255])).all()==True:
+            return "False"
+        else:
+            return "True"
     def resize(beforesize,aftersize,how):
         if beforesize>aftersize and how==0:
             rinX=beforesize/aftersize
@@ -108,6 +131,13 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
                 inX = (i+0.5)*beforesize/aftersize
                 inY = (j+0.5)*beforesize/aftersize
                 outimg[i,j]=merge(inimg,inX,inY,inrangeX,inrangeY)
+    elif mode==2:
+        outimg=np.zeros((outX,outY,inimg.shape[2]))
+        for i in range(outX):
+            for j in range(outY):
+                inX = (i+0.5)*beforesize/aftersize
+                inY = (j+0.5)*beforesize/aftersize
+                outimg[i,j]=merge_mode2(inimg,inX,inY,inrangeX,inrangeY)
     elif mode==1:
         outimg=np.zeros((outX,outY))
         for i in range(outX):
