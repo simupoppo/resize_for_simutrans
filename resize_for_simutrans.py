@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd 
 from PIL import Image
 import tkinter as tk
 from tkinter import ttk
@@ -54,7 +53,7 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
                 #print(inimg[k,l])
                 if 0<= k< inimg.shape[0] and 0<= l< inimg.shape[1]:
                     if reduce_color(inimg[k,l])!="False":
-                        thiscount=(-max(k,inX-inrangeX/2.0)+min(k+1,inX+inrangeX/2.0))*(-max(l,inY-inrangeY/2.0)+min(l+1,inY+inrangeY/2.0))
+                        thiscount=np.abs((-max(k,inX-inrangeX/2.0)+min(k+1,inX+inrangeX/2.0))*(-max(l,inY-inrangeY/2.0)+min(l+1,inY+inrangeY/2.0)))
                         color=color+inimg[k,l]*thiscount
                         #print(inimg[k,l],color,k,l)
                         count = count+thiscount
@@ -81,8 +80,10 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
             result = color/count
             return result
     def reduce_color(input):
-        if (input==np.array([231,255,255])).all()=="True":
+        if (input==np.array([231,255,255])).all()==True:
             return "False"
+        else:
+            return "True"
     def resize(beforesize,aftersize,how):
         if beforesize>aftersize and how==0:
             rinX=beforesize/aftersize
