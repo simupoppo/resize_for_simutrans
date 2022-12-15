@@ -7,9 +7,7 @@ Simutrans 向け画像拡大縮小プログラムです。
 
 (現在は背景色のみ対応。今後プレイヤーカラーや影、発光色等に対応していく予定。)
 ## ダウンロード
-本ディレクトリの resize_for_simutrans.tar.gz,  resize_for_simutrans.7z または resize_for_simutrans.zip を解凍してください。
-
-7zファイルは 7-Zip https://sevenzip.osdn.jp/ を用いて解凍できます。
+ダウンロードして使用してください。
 
 ## 使用方法
 1. アプリケーション resize_for_simutrans.exe を起動してください。
@@ -38,6 +36,6 @@ Simutrans 向け画像拡大縮小プログラムです。
 ## release note
 2022/12/13 ver0.0 公開。RGBモードおよびPモードの画像(PNGのみ)に対応。背景色のみ例外設定。
 
-2022/12/14 ver0.1 RGBAモード(透過)に対応。圧縮できなかったため .zip はver0.0 のままです。
+2022/12/14 ver1.0.0 RGBAモード(透過)に対応。圧縮できなかったため .zip はver0.0 のままです。
 
-2022/12/15 wiki公開
+2022/12/15 wiki公開,exeファイルを1ファイルに統合
