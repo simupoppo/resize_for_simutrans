@@ -49,11 +49,13 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
     def merge(inimg,inX,inY,inrangeX,inrangeY):
         color = np.array([0.0,0.0,0.0])
         count = 0.0
+        if special_color(inimg[int(inX),int(inY)])=="Special_color":
+            return inimg[int(inX),int(inY)]
         for k in range(int(-inrangeX/2.0+inX),int(inrangeX/2.0+inX+0.99)):
             for l in range(int(-inrangeY/2.0+inY-0.99),int(inrangeY/2.0+inY+0.99)):
                 #print(inimg[k,l])
                 if 0<= k< inimg.shape[0] and 0<= l< inimg.shape[1]:
-                    if reduce_color(inimg[k,l])!="False":
+                    if reduce_color(inimg[k,l])!="False" and special_color(inimg[k,l])!="Special_color":
                         thiscount=np.abs((-max(k,inX-inrangeX/2.0)+min(k+1,inX+inrangeX/2.0))*(-max(l,inY-inrangeY/2.0)+min(l+1,inY+inrangeY/2.0)))
                         color=color+inimg[k,l]*thiscount
                         #print(inimg[k,l],color,k,l)
@@ -96,12 +98,23 @@ def resize_program(inimg,beforesize,aftersize,how,mode):
             return inimg[int(inX),int(inY)]
         else:
             result = color/count
+            result = result.astype(np.uint8)
+            if special_color(result)=="Special_color":
+                result[0]=result[0]-(result[0]-123.5)/np.abs(result[0]-123.5)
+                result=result.astype(np.unit8)
             return result
     def reduce_color(input):
         if (input==np.array([231,255,255])).all()==True:
             return "False"
         else:
             return "True"
+    def special_color(input):
+        special_color_list=np.array([[107,107,107],[155,155,155],[179,179,179],[201,201,201],[223,223,223],[127,155,241],[255,255,83],[255,33,29],[1,221,1],[227,227,255],[193,177,209],[77,77,77],[255,1,127],[1,1,255],[36,75,103],[57,94,124],[76,113,145],[96,132,167],[116,151,189],[136,171,211],[156,190,233],[176,210,255],[123,88,3],[142,111,4],[161,134,5],[180,157,7],[198,180,8],[217,203,10],[236,226,11],[255,249,13]])
+        for i in range(len(special_color_list)):
+            if np.array_equal(input,special_color_list[i]):
+                return "Special_color"
+                break
+        return "usual_color"
     def reduce_color_2(input):
         if (input==np.array([231,255,255,255])).all()==True:
             return "False"
